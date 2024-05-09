@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:timeware_test/data/model/species_model.dart';
 import 'package:timeware_test/views/species_detail_screen.dart';
 import 'package:timeware_test/views/home_screen.dart';
 import 'package:timeware_test/views/species_list_screen.dart';
@@ -20,6 +19,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      theme: ThemeData(
+        primarySwatch: Colors.brown,
+        primaryColor: Colors.brown.shade400,
+        appBarTheme: AppBarTheme(
+          color: Colors.brown.shade400,
+          foregroundColor: Colors.white,
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Colors.brown.shade400,
+        ),
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.brown.shade400,
+          textTheme: ButtonTextTheme.primary,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
     );
@@ -37,23 +51,31 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'species/:letter',
           builder: (BuildContext context, GoRouterState state) {
-            final Map extra = state.extra as Map;
+            final String letter = state.pathParameters['letter']!.toUpperCase();
 
-            final String letter = extra['letter'];
-
-            final List<SpeciesModel> speciesList = extra['speciesList'];
-
-            return SpeciesListScreen(letter: letter, speciesList: speciesList);
+            return SpeciesListScreen(letter: letter);
           },
         ),
         GoRoute(
-          path: 'detail/:name',
+          path: 'detail/:specieId',
           builder: (BuildContext context, GoRouterState state) {
-            final Map extra = state.extra as Map;
+            Map extra = {};
+            String specieName = "No Name";
+            late int specieId;
 
-            final int specieId = extra['specieId'];
+            if (state.extra != null) {
+              extra = state.extra as Map;
+              specieName = extra['specieName'];
+            }
+
+            try {
+              specieId = int.parse(state.pathParameters['specieId']!);
+            } catch (E) {
+              specieId = -1;
+            }
 
             return SpecieDetailScreen(
+              specieName: specieName,
               specieId: specieId,
             );
           },
