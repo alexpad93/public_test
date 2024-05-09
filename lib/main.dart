@@ -4,23 +4,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:timeware_test/data/model/species_model.dart';
 import 'package:timeware_test/views/species_detail_screen.dart';
+import 'package:timeware_test/views/home_screen.dart';
 import 'package:timeware_test/views/species_list_screen.dart';
 
-/// This sample app shows an app with two screens.
-///
-/// The first route '/' is mapped to [HomeScreen], and the second route
-/// '/details' is mapped to [DetailsScreen].
-///
-/// The buttons use context.go() to navigate to each destination. On mobile
-/// devices, each destination is deep-linkable and on the web, can be navigated
-/// to using the address bar.
 void main() => runApp(
-       const MyApp(),
-     
+      const MyApp(),
     );
 
-/// The main app.
 class MyApp extends StatelessWidget {
   /// Constructs a [MyApp]
   const MyApp({super.key});
@@ -28,28 +20,45 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       routerConfig: _router,
     );
   }
 }
 
-/// The route configuration.
 final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return const SpeciesListScreen();
+        return const HomeScreen();
       },
       routes: <RouteBase>[
         GoRoute(
-          path: 'detail',
+          path: 'species/:letter',
           builder: (BuildContext context, GoRouterState state) {
-            return const SpeciesDetailScreen();
+            final Map extra = state.extra as Map;
+
+            final String letter = extra['letter'];
+
+            final List<SpeciesModel> speciesList = extra['speciesList'];
+
+            return SpeciesListScreen(letter: letter, speciesList: speciesList);
+          },
+        ),
+        GoRoute(
+          path: 'detail/:name',
+          builder: (BuildContext context, GoRouterState state) {
+            final Map extra = state.extra as Map;
+
+            final int specieId = extra['specieId'];
+
+            return SpecieDetailScreen(
+              specieId: specieId,
+            );
           },
         ),
       ],
     ),
   ],
 );
- 

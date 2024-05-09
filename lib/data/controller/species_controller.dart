@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:timeware_test/data/model/species_model.dart';
 import 'package:http/http.dart';
 
+//TODO: single
 class SpeciesController {
   String category = 'VU';
   String token = '9bb4facb6d23f48efbf424bb05c0c1ef1cf6f468393bc745d42179ac4aca5fee';
@@ -14,6 +15,18 @@ class SpeciesController {
     if (response.statusCode == 200) {
       var result = json.decode(response.body)['result'];
       return List.from(result).map((e) => SpeciesModel.fromJson(e)).toList();
+    } else {
+      throw Exception('Failed to load species');
+    }
+  }
+
+  Future<SpeciesModel> fetchDetailSpeciesById(int specieId) async {
+    final url = 'https://apiv3.iucnredlist.org/api/v3/species/narrative/id/$specieId?token=$token';
+    final response = await get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var result = json.decode(response.body)['result'][0];
+      return SpeciesModel.fromNarrativeJson(result);
     } else {
       throw Exception('Failed to load species');
     }
