@@ -47,7 +47,7 @@ class _SpeciesListScreenState extends State<SpeciesListScreen> {
                     itemBuilder: (context, index) {
                       var species = speciesListOrderByLetter![index];
                       return ListTile(
-                        contentPadding:  kIsWeb ? const EdgeInsets.all(24.0) : const EdgeInsets.all(16.0),
+                        contentPadding: kIsWeb ? const EdgeInsets.all(24.0) : const EdgeInsets.all(16.0),
                         trailing: const Icon(Icons.arrow_right),
                         onTap: () {
                           navigateToDetailSpecie(species.taxonid!, {'specieName': species.scientificName!});
@@ -64,6 +64,10 @@ class _SpeciesListScreenState extends State<SpeciesListScreen> {
   }
 
   void navigateToDetailSpecie(int specieId, Map<String, String> extra) {
-    GoRouter.of(context).go('/detail/$specieId', extra: extra);
+    if (kIsWeb) {
+      GoRouter.of(context).go('/detail/$specieId', extra: extra);
+    } else {
+      GoRouter.of(context).push('/detail/$specieId', extra: extra);
+    }
   }
 }

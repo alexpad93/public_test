@@ -30,3 +30,46 @@ Nella route 'detail/:specieId', viene fatto un tentativo di recuperare e convert
 Conclusione:
 La configurazione di GoRouter in questa applicazione dimostra un uso efficace del routing basato su URL per gestire la navigazione tra schermate in una applicazione Flutter. La capacità di passare parametri e gestire lo stato tra le route rende GoRouter uno strumento potente per lo sviluppo di applicazioni Flutter complesse.
 
+
+
+
+# Architettura MVC:
+L'architettura MVC separa la logica dell'applicazione in tre componenti interconnessi, ciascuno con responsabilità specifiche:
+
+Modello (Model): Gestisce i dati e le regole di business dell'applicazione.
+Vista (View): Presenta i dati (il modello) all'utente e invia le interazioni dell'utente (ad esempio, input) al controller.
+Controllore (Controller): Riceve input e iniziative azioni nei dati/modello e successivamente aggiorna la vista.
+Utilizzo del Singleton:
+Per le chiamate al server, hai implementato il pattern Singleton nel controller. Questo garantisce che una singola istanza del controller sia condivisa nell'applicazione, promuovendo un accesso efficiente e centralizzato alle operazioni di rete. Le principali vantaggi del Singleton in questo contesto includono:
+
+Gestione Centralizzata delle Risorse: Il Singleton permette di gestire connessioni e risorse relative alle chiamate HTTP da un unico punto, semplificando la manutenzione e il debugging.
+Riduzione dell'Overhead: Creare multiple istanze di classi che gestiscono le chiamate HTTP può essere dispendioso in termini di risorse e tempo di esecuzione. Un Singleton aiuta a minimizzare questo overhead.
+Implementazione del Singleton:
+Il controller delle specie, ad esempio, potrebbe essere strutturato come segue:
+ 
+class SpeciesController {
+  static final SpeciesController _instance = SpeciesController._internal();
+
+  factory SpeciesController() {
+    return _instance;
+  }
+
+  SpeciesController._internal();
+
+  Future<List<SpeciesModel>> fetchSpeciesByCategory() async {
+    var url = Uri.parse('https://api.example.com/species');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> speciesJson = json.decode(response.body);
+      return speciesJson.map((json) => SpeciesModel.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load species');
+    }
+  }
+}
+
+Vantaggi del MVC con Singleton:
+
+Semplicità: L'approccio è diretto e facile da comprendere, rendendolo ideale per team piccoli o progetti con meno requisiti tecnici complessi.
+Manutenibilità: La separazione delle responsabilità facilita la manutenzione e l'aggiornamento del codice.
+Performance: Utilizzando un Singleton per le chiamate di rete, l'applicazione riduce il consumo di risorse di sistema, migliorando le performance.

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart'; // Assicurati di includere foundation.dart per kIsWeb
+import 'package:flutter/foundation.dart'; 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:timeware_test/data/controller/species_controller.dart';
@@ -21,6 +21,7 @@ class _SpecieDetailScreenState extends State<SpecieDetailScreen> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            automaticallyImplyLeading: kIsWeb ? false : true,
             expandedHeight: kIsWeb ? 0.0 : 200.0,
             floating: false,
             pinned: true,
@@ -119,7 +120,7 @@ class _SpecieDetailScreenState extends State<SpecieDetailScreen> {
     Color iconColor = colorMapping[title] ?? Colors.grey;
 
     return Padding(
-      padding: kIsWeb ? const EdgeInsets.all(28.0) : const EdgeInsets.all(24.0),
+      padding: kIsWeb ? const EdgeInsets.all(24.0) : const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -141,7 +142,7 @@ class _SpecieDetailScreenState extends State<SpecieDetailScreen> {
 
   Widget buildLastDetailSection(String title, String? content) {
     return Padding(
-     padding: kIsWeb ? const EdgeInsets.all(24.0) : const EdgeInsets.all(16.0),
+      padding: kIsWeb ? const EdgeInsets.all(24.0) : const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

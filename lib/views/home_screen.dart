@@ -89,6 +89,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void navigateToSpecies(String letter) {
-    GoRouter.of(context).go('/species/$letter');
+    if (kIsWeb) {
+      GoRouter.of(context).go('/species/$letter');
+    } else {
+      GoRouter.of(context).push('/species/$letter');
+    }
   }
 }
