@@ -25,7 +25,7 @@ class _SpecieDetailScreenState extends State<SpecieDetailScreen> {
             expandedHeight: kIsWeb ? 0.0 : 200.0,
             floating: false,
             pinned: true,
-            backgroundColor: kIsWeb ? Theme.of(context).primaryColor : Colors.transparent,
+            backgroundColor: kIsWeb ? Theme.of(context).primaryColor : Theme.of(context).primaryColor,
             iconTheme: const IconThemeData(color: Colors.white),
             flexibleSpace: kIsWeb
                 ? FlexibleSpaceBar(
